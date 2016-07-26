@@ -1,4 +1,4 @@
-module PerfFile
+module PerfEvents
   
   using StructIO
   import Base: start, next, done, getindex, endof, length, show
