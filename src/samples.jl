@@ -84,7 +84,6 @@ function extract_sample_kinds(data, attr)
     end
     if (sample_type & PERF_SAMPLE_REGS_USER) != 0
       abi = read(buf, UInt64)
-      @show abi
       sample_data[PERF_SAMPLE_REGS_USER] = abi == 0 ? UInt64[] :
         read(buf, UInt64, count_ones(attr.sample_regs_user))
     end
