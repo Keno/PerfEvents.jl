@@ -3,6 +3,8 @@ module PerfEvents
   using StructIO
   import Base: start, next, done, getindex, endof, length, show
   
+  export EventIterator
+  
   @struct immutable perf_file_section
     offset::UInt64
     size::UInt64
@@ -59,6 +61,21 @@ module PerfEvents
     pgoff::UInt64
   end
   
+  @struct immutable mmap2_extra_record
+    maj::UInt32
+    min::UInt32
+    ino::UInt64
+    ino_generation::UInt64
+    prot::UInt32
+    flags::UInt32
+  end
+  
+  @struct immutable time_conv_record
+    time_shift::UInt64
+    time_mult::UInt64
+    time_zero::UInt64
+  end
+
   # Iterator for `attrs`
   @struct immutable perf_event_attr
     ev_type::UInt32
@@ -148,6 +165,8 @@ module PerfEvents
     misc::UInt16
     record::Any
   end
+  Base.show(io::IO, rec::Record) =
+    println(io, PERF_EVENT_TYPE[rec.event_type], ": ", rec.record)
   
   start(it::RecordIterator) = 0
   done(it::RecordIterator, s) = s >= it.handle.header.data.size
@@ -178,6 +197,14 @@ module PerfEvents
           idx = findfirst(z,'\0')
           z = idx == 0 ? z : z[1:idx-1]
           (x,y,z)
+      elseif header.event_type == PERF_RECORD_MMAP2
+          x = unpack(it.handle.io, itrace_start)
+          y = unpack(it.handle.io, mmap_record)
+          z = unpack(it.handle.io, mmap2_extra_record)
+          fname = read_remaining_string()
+          idx = findfirst(fname,'\0')
+          fname = idx == 0 ? fname : fname[1:idx-1]
+          (x,y,z,fname)
       elseif header.event_type == PERF_RECORD_SAMPLE
           read_remaining_array()
       elseif header.event_type == PERF_RECORD_FORK
@@ -192,8 +219,13 @@ module PerfEvents
            unpack(it.handle.io, itrace_start),
            read(it.handle.io, UInt64),
            read_remaining_array())
+      elseif header.event_type == PERF_RECORD_TIME_CONV
+          unpack(it.handle.io, time_conv_record)
+      elseif header.event_type == PERF_RECORD_FINISHED_ROUND
       else
-          error("Unknown record type $(PERF_EVENT_TYPE[header.event_type])")
+          error(string("Unknown record type ",
+            try PERF_EVENT_TYPE[header.event_type];
+            catch; string("0x",hex(header.event_type)); end))
       end)
     return (rec, s + header.size)
   end

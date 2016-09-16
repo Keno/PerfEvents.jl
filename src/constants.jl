@@ -18,6 +18,7 @@ macro constants(array, stripprefix, expr)
     return esc(ret)
 end
 @constants PERF_EVENT_TYPE "" begin
+    # Kernel defined events
     const PERF_RECORD_MMAP              = 1
     const PERF_RECORD_LOST              = 2
     const PERF_RECORD_COMM              = 3
@@ -33,6 +34,23 @@ end
     const PERF_RECORD_LOST_SAMPLES      = 13
     const PERF_RECORD_SWITCH            = 14
     const PERF_RECORD_SWITCH_CPU_WIDE   = 15
+    # perf (the user space tool) defined events
+    const PERF_RECORD_HEADER_ATTR          = 64
+	const PERF_RECORD_HEADER_EVENT_TYPE    = 65
+	const PERF_RECORD_HEADER_TRACING_DATA  = 66
+	const PERF_RECORD_HEADER_BUILD_ID      = 67
+	const PERF_RECORD_FINISHED_ROUND       = 68
+	const PERF_RECORD_ID_INDEX             = 69
+	const PERF_RECORD_AUXTRACE_INF         = 70
+	const PERF_RECORD_AUXTRACE             = 71
+	const PERF_RECORD_AUXTRACE_ERRO        = 72
+	const PERF_RECORD_THREAD_MAP           = 73
+	const PERF_RECORD_CPU_MAP              = 74
+	const PERF_RECORD_STAT_CONFIG          = 75
+	const PERF_RECORD_STAT                 = 76
+	const PERF_RECORD_STAT_ROUND           = 77
+	const PERF_RECORD_EVENT_UPDAT          = 78
+	const PERF_RECORD_TIME_CONV            = 79
 end
 @constants PERF_TYPE "" begin
     const PERF_TYPE_HARDWARE            = 0

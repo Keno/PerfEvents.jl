@@ -112,3 +112,9 @@ function extract_sample_kinds(data, attr)
     end
     sample_data
 end
+
+function is_perf_context_ip(ip)
+  UInt64(ip) in (PERF_CONTEXT_HV, 
+    PERF_CONTEXT_KERNEL, PERF_CONTEXT_USER, PERF_CONTEXT_GUEST,
+    PERF_CONTEXT_GUEST_KERNEL, PERF_CONTEXT_GUEST_USER)
+end
