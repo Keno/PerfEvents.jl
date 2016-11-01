@@ -51,6 +51,7 @@ function extract_read_format(buf, attr)
     (time_value(time_enabled,time_running), values)
 end
 
+extract_sample_kinds(data, attr::perf_file_attr) = extract_sample_kinds(data, attr.attr)
 function extract_sample_kinds(data, attr)
     sample_type = attr.sample_type
     sample_data = Dict{UInt64, Any}()

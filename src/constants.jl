@@ -106,3 +106,21 @@ const PERF_CONTEXT_USER              = -512  % UInt64
 const PERF_CONTEXT_GUEST             = -2048 % UInt64
 const PERF_CONTEXT_GUEST_KERNEL      = -2176 % UInt64
 const PERF_CONTEXT_GUEST_USER        = -2560 % UInt64
+
+const PERF_RECORD_MISC_CPUMODE_MASK      = UInt16(7) << 0
+const PERF_RECORD_MISC_CPUMODE_UNKNOWN   = UInt16(0) << 0
+const PERF_RECORD_MISC_KERNEL            = UInt16(1) << 0
+const PERF_RECORD_MISC_USER              = UInt16(2) << 0
+const PERF_RECORD_MISC_HYPERVISOR        = UInt16(3) << 0
+const PERF_RECORD_MISC_GUEST_KERNEL      = UInt16(4) << 0
+const PERF_RECORD_MISC_GUEST_USER        = UInt16(5) << 0
+
+const PERF_RECORD_MISC_PROC_MAP_PARSE_TIMEOUT = UInt16(1) << 12
+
+const PERF_RECORD_MISC_MMAP_DATA              = UInt16(1) << 13
+const PERF_RECORD_MISC_COMM_EXEC              = UInt16(1) << 13
+const PERF_RECORD_MISC_SWITCH_OUT             = UInt16(1) << 13
+
+const PERF_RECORD_MISC_EXACT_IP               = UInt16(1) << 14
+
+const PERF_RECORD_MISC_EXT_RESERVED           = UInt16(1) << 15
